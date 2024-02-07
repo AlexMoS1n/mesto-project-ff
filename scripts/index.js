@@ -9,7 +9,7 @@ function addCard(card) {
   placesList.append(card);
 }
 
-function createCard(srcAddress, altTitle, deleteFunction){
+function createCard(srcAddress, altTitle, deleteFunction) {
   const cardElement = cardTemplate.querySelector('.places__item').cloneNode(true); 
   const cardImage = cardElement.querySelector('.card__image'); 
   cardImage.src = srcAddress;
@@ -19,7 +19,7 @@ function createCard(srcAddress, altTitle, deleteFunction){
   return cardElement;
 }
 
-function deleteCard (evt){
+function deleteCard (evt) {
   const card = evt.target.closest('.places__item');
   card.remove();
 }
