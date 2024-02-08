@@ -19,7 +19,7 @@ function createCard(srcAddress, altTitle, deleteFunction) {
   return cardElement;
 }
 
-function deleteCard (evt) {
+function deleteCard(evt) {
   const card = evt.target.closest('.places__item');
   card.remove();
 }
