@@ -1,7 +1,7 @@
 import './styles/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, pushLike, deleteCard} from './scripts/card.js';
-import {openPopUp, closePopUp} from './scripts/modal.js';
+import {openPopUp, closeButtonPopUp, closeOverlayPopUp, closePopUp} from './scripts/modal.js';
 
 const buttonsClosePopUp = document.querySelectorAll('.popup__close');
 const overlaysPopUp = document.querySelectorAll('.popup');
@@ -81,23 +81,13 @@ function increaseSizeImage(evt) {
   openPopUp(popUpImage);
 }
 
-function closeButtonPopUp(evt) {
-  closePopUp(evt.target.closest('.popup'))
-}
-
-function closeOverlayPopUp(evt) {
-  if(evt.target === evt.currentTarget) { 
-    closePopUp(evt.target)
-  }  
-}
-
 function submitEditProfileForm(title, description, inputTitle, inputDescription, popUpElement) {
   title.textContent = inputTitle.value;
   description.textContent = inputDescription.value;
   closePopUp(popUpElement)
 }
 
-function createNewPlace(conteinerForPlace, placeNewElement, popUpElement) {
-  conteinerForPlace.prepend(placeNewElement);
+function createNewPlace(containerForPlace, placeNewElement, popUpElement) {
+  containerForPlace.prepend(placeNewElement);
   closePopUp(popUpElement)
 }

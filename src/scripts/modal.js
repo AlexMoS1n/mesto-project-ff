@@ -10,10 +10,20 @@ function closePopUp(popUpElement) {
   document.removeEventListener('keydown',closeByEsc)
 }
 
+function closeButtonPopUp(evt) {
+  closePopUp(evt.target.closest('.popup'))
+}
+
+function closeOverlayPopUp(evt) {
+  if(evt.target === evt.currentTarget) { 
+    closePopUp(evt.target)
+  }  
+}
+
 function closeByEsc(evt) {
   if(evt.key === 'Escape') {
     closePopUp(document.querySelector('.popup_is-opened'))
   }
 } 
 
-export {openPopUp, closePopUp};
+export {openPopUp, closeButtonPopUp, closeOverlayPopUp, closePopUp};
