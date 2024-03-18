@@ -2,6 +2,7 @@ import './styles/index.css';
 import {initialCards} from './scripts/cards.js';
 import {createCard, pushLike, deleteCard} from './scripts/card.js';
 import {openPopUp, closeButtonPopUp, closeOverlayPopUp, closePopUp} from './scripts/modal.js';
+import {enableValidation, clearValidation} from './scripts/validation.js';
 
 const buttonsClosePopUp = document.querySelectorAll('.popup__close');
 const overlaysPopUp = document.querySelectorAll('.popup');
@@ -30,6 +31,16 @@ const placeCardData = {
   buttonLikeActive: 'card__like-button_is-active',
   buttonDelete: '.card__delete-button'
 };
+const validationData = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible'
+};
+
+enableValidation(validationData);
 
 initialCards.forEach((item) => {
   addCard(placesList, createCard(cardTemplate, item, placeCardData, pushLike, deleteCard, increaseSizeImage))
@@ -46,6 +57,7 @@ overlaysPopUp.forEach((overlay) => {
 buttonEditProfile.addEventListener('click', () => {
   nameInput.value = profileTitle.textContent;
   jobInput.value = profileDescription.textContent;
+  clearValidation(formEditProfile, validationData);
   openPopUp(popupEdit)
 });
 
@@ -66,7 +78,8 @@ formCardPlace.addEventListener('submit', (evt)=>{
     name: cardName.value
   };
   createNewPlace(placesList, createCard(cardTemplate, placeNewData, placeCardData, pushLike, deleteCard, increaseSizeImage), popUpNewCard);
-  formCardPlace.reset()
+  formCardPlace.reset();
+  clearValidation(formCardPlace, validationData)
 });
 
 function addCard(containerForCards, card) {
@@ -91,3 +104,4 @@ function createNewPlace(containerForPlace, placeNewElement, popUpElement) {
   containerForPlace.prepend(placeNewElement);
   closePopUp(popUpElement)
 }
+
