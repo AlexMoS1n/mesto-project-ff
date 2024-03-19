@@ -51,6 +51,17 @@
       </form>
     </div>
   </div>
+  <div class="popup popup_avatar_edit popup_is-animated">
+    <div class="popup__content">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Изменить аватарку</h3>
+      <form class="popup__form" name="edit-avatar"  novalidate>
+        <input type="url" name="avatar" class="popup__input popup__input_type_avatar" placeholder="Укажите ссылку на аватарку">
+        <span class="avatar-error"></span>
+        <button type="submit" class="button popup__button">Сохранить</button>
+      </form>
+    </div>
+  </div>
   <div class="popup popup_type_new-card popup_is-animated">
     <div class="popup__content">
       <button type="button" class="popup__close"></button>
@@ -83,7 +94,10 @@
     <div class="card__description">
       <h2 class="card__title">
       </h2>
-      <button type="button" class="card__like-button"></button>
+      <div class="card__like">
+        <button type="button" class="card__like-button"></button>
+        <span class="card__like-counter">2</span>
+      </div>
     </div>
   </li>
 </template>
