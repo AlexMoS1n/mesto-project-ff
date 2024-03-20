@@ -38,13 +38,13 @@ function pushRemoveLike(evt, classActiveLikeButton, cardLikeCounter, serverData,
       cardLikeCounter.textContent = card.likes.length; 
       evt.target.classList.remove(classActiveLikeButton);
       serverData.likes = card.likes
-    }).catch((err) => console.error("Ошибка в снятии лайка:", err));
+    }).catch((err) => console.error("Ошибка в снятии лайка:", err))
   } else {
     changeLike(serverData._id, true).then(card => {
       cardLikeCounter.textContent = card.likes.length; 
       evt.target.classList.add(classActiveLikeButton);
       serverData.likes = card.likes
-    }).catch((err) => console.error("Ошибка в установки лайка:", err));
+    }).catch((err) => console.error("Ошибка в установки лайка:", err))
   }
 }
 
