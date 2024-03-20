@@ -101,6 +101,7 @@ formEditAvatar.addEventListener('submit', () => {
   renderLoading(true, buttonSubmitFormAvatar);
   changeAvatar(avatarUrl.value).then((user) => {
     profileImage.style.backgroundImage = `url('${user.avatar}')`;
+    formEditAvatar.reset();
     closePopUp(popupAvatar)
   }).catch((err) => {console.log('Ошибка в изменении атарки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormAvatar)});
 })
