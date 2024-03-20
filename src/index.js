@@ -2,8 +2,8 @@ import './styles/index.css';
 import {createCard, pushRemoveLike, deleteCard} from './scripts/card.js';
 import {openPopUp, closeButtonPopUp, closeOverlayPopUp, closePopUp} from './scripts/modal.js';
 import {enableValidation, clearValidation} from './scripts/validation.js';
-import {getMyProfile, getCards, editMyProfile, pushNewCard, changeAvatar} from './scripts/api.js';
-import {renderLoading} from './scripts/ux.js';
+import {getMyProfile, getCards, editMyProfile, pushNewCard, shiftCard, changeAvatar} from './scripts/api.js';
+import {renderLoading} from './scripts/utils.js';
 
 const buttonsClosePopUp = document.querySelectorAll('.popup__close');
 const overlaysPopUp = document.querySelectorAll('.popup');
@@ -86,6 +86,7 @@ avatarImage.addEventListener('click', () => {
 })
 
 buttonNewCard.addEventListener('click', () => {
+  clearValidation(formCardPlace, validationData);
   openPopUp(popUpNewCard);
 });
 
@@ -112,12 +113,11 @@ formCardPlace.addEventListener('submit', ()=>{
   };
   return pushNewCard(placeNewData).then(card => {
     createNewPlace(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, increaseSizeImage, card.owner._id, popUpDelCard), popUpNewCard);
-    formCardPlace.reset();
-    clearValidation(formCardPlace, validationData)
+    formCardPlace.reset()
   }).catch((err) => {console.log('Ошибка в добавлении новой карточки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormCardPlace, 'Создать')});
 });
 
-buttonForDelCard.addEventListener('click', () => deleteCard(placeCardData.idDelCard, placeCardData.cardForDel, popUpDelCard));
+buttonForDelCard.addEventListener('click', () => deleteCardWithConfirmation(placeCardData.idDelCard, placeCardData.cardForDel, popUpDelCard));
 
 function addCard(containerForCards, card) {
   containerForCards.append(card)
@@ -141,3 +141,16 @@ function createNewPlace(containerForPlace, placeNewElement, popUpElement) {
   containerForPlace.prepend(placeNewElement);
   closePopUp(popUpElement)
 }
+
+function deleteCardWithConfirmation(id, card, popUp) {
+  shiftCard(id).then(() => {
+    deleteCard(card);
+    closePopUp(popUp);
+  }).catch((err) => {console.log('Ошибка в удалении карточки ' + err)})
+}
+/* Извините за комментарий, не совсем понял связь Ваших комметариев по поводу функции удаления карточки.
+   У меня удаляет не иконка на карточке, она лишь вызывает Pop-Up с подтверждением удаления, в котором 
+   как раз имеется кнопка для удаления. И не понятно за чем ради одной кнопки создавать форму, по этому решил
+   полную функцию удаления назвать deleteCardWithConfirmation и не создавть форму. И простите за невнимательность,
+   при создании ветки просмотра сайта через гитхаб, в спешек скопировал команды из теории, и затер "dev": "webpack serve".   
+*/ 
