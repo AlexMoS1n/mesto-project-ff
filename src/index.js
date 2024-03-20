@@ -13,6 +13,7 @@ const popupEdit = document.querySelector('.popup_type_edit');
 const popupAvatar = document.querySelector('.popup_avatar_edit');
 const popUpNewCard = document.querySelector('.popup_type_new-card');
 const popUpImage = document.querySelector('.popup_type_image');
+const popUpDelCard = document.querySelector('.popup_delete_card');
 const picturePopUpImage = popUpImage.querySelector('.popup__image'); 
 const popupCaption = popUpImage.querySelector('.popup__caption');
 const buttonEditProfile = document.querySelector('.profile__edit-button');
@@ -32,6 +33,7 @@ const formCardPlace = popUpNewCard.querySelector('.popup__form');
 const cardName = formCardPlace.querySelector('.popup__input_type_card-name');
 const pictureUrl = formCardPlace.querySelector('.popup__input_type_url');
 const buttonSubmitFormCardPlace = formCardPlace.querySelector('.popup__button');
+const buttonForDelCard = popUpDelCard.querySelector('.popup__button');
 const placeCardData = {
   card: '.places__item',
   image: '.card__image',
@@ -39,7 +41,9 @@ const placeCardData = {
   buttonLike: '.card__like-button',
   buttonLikeActive: 'card__like-button_is-active',
   buttonDelete: '.card__delete-button',
-  likeCounter: '.card__like-counter'
+  likeCounter: '.card__like-counter',
+  idDelCard: '',
+  cardForDel: ''
 };
 const validationData = {
   formSelector: '.popup__form',
@@ -58,7 +62,7 @@ Promise.all([getMyProfile(), getCards()])
     profileTitle.textContent = profile.name;
     profileDescription.textContent = profile.about;
     cards.forEach((card) => {
-      addCard(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, deleteCard, increaseSizeImage, profile._id))
+      addCard(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, increaseSizeImage, profile._id, popUpDelCard))
     });
   }).catch((err) => {console.log(err)}); 
 
@@ -107,11 +111,13 @@ formCardPlace.addEventListener('submit', ()=>{
     name: cardName.value
   };
   return pushNewCard(placeNewData).then(card => {
-    createNewPlace(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, deleteCard, increaseSizeImage, card.owner._id), popUpNewCard);
+    createNewPlace(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, increaseSizeImage, card.owner._id, popUpDelCard), popUpNewCard);
     formCardPlace.reset();
     clearValidation(formCardPlace, validationData)
   }).catch((err) => {console.log('Ошибка в добавлении новой карточки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormCardPlace, 'Создать')});
 });
+
+buttonForDelCard.addEventListener('click', () => deleteCard(placeCardData.idDelCard, placeCardData.cardForDel, popUpDelCard));
 
 function addCard(containerForCards, card) {
   containerForCards.append(card)
