@@ -33,16 +33,12 @@ const shiftCard = (idCard) => {
   return getData(pathData.cards + `/${idCard}`, 'DELETE')
 }
 
-const pushLike = (idCard) => {
-  return getData(pathData.likes + `/${idCard}`, 'PUT')
-}
-
-const removeLike = (idCard) => {
-  return getData(pathData.likes + `/${idCard}`, 'DELETE')
+const changeLike = (idCard, methodLike) => {
+  return getData(pathData.likes + `/${idCard}`, `${methodLike?'PUT':'DELETE'}`)
 }
 
 const changeAvatar = (avatar) => {
-  return postData(pathData.avatar, {avatar}, 'PATCH')
+  return postData(pathData.avatar, {avatar}, 'PATCH') 
 }
 
 function getData(pathResource, method = 'GET') {
@@ -64,7 +60,7 @@ function checkResponse(res) {
   if (res.ok) {
     return res.json();
   }
-  return Promise.reject(`Ошибка: ${res.status}`);
+  return Promise.reject(`Ошибка с получением данных: ${res.status}`);
 }
 
-export {getMyProfile, getCards, editMyProfile, pushNewCard, shiftCard, pushLike, removeLike, changeAvatar};
+export {getMyProfile, getCards, editMyProfile, pushNewCard, shiftCard, changeLike, changeAvatar};

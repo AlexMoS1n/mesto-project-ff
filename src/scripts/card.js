@@ -1,4 +1,4 @@
-import {shiftCard, pushLike, removeLike} from './api.js';
+import {shiftCard, changeLike} from './api.js';
 
 function createCard(templateElement, serverData, cardData, likeFunction, deleteFunction, changeFunction, profileId) {
   const cardElement = templateElement.querySelector(cardData.card).cloneNode(true); 
@@ -17,7 +17,7 @@ function createCard(templateElement, serverData, cardData, likeFunction, deleteF
   if(serverData.owner._id === profileId) {
     buttonDelCard.addEventListener('click',(evt) => deleteFunction(evt, cardData.card, serverData._id))}
   else {
-    buttonDelCard.style.display = 'none';
+    buttonDelCard.remove();
   };
   cardLikeButton.addEventListener('click',(evt)=>likeFunction(evt, cardData.buttonLikeActive, cardLikeCounter, serverData, profileId))
   return cardElement
@@ -25,13 +25,13 @@ function createCard(templateElement, serverData, cardData, likeFunction, deleteF
 
 function pushRemoveLike(evt, classActiveLikeButton, cardLikeCounter, serverData, profileId) {
   if(checkLike(serverData.likes, profileId)) {
-    removeLike(serverData._id).then(card => {
+    changeLike(serverData._id, false).then(card => {
       cardLikeCounter.textContent = card.likes.length; 
       evt.target.classList.remove(classActiveLikeButton);
       serverData.likes = card.likes
     })
   } else {
-    pushLike(serverData._id).then(card => {
+    changeLike(serverData._id, true).then(card => {
       cardLikeCounter.textContent = card.likes.length; 
       evt.target.classList.add(classActiveLikeButton);
       serverData.likes = card.likes
@@ -50,6 +50,5 @@ function checkLike(cardLikesArray, profileId) {
     return like._id === profileId
   })
 }
-
 
 export {createCard, pushRemoveLike, deleteCard};

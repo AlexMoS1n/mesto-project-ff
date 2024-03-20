@@ -3,6 +3,7 @@ import {createCard, pushRemoveLike, deleteCard} from './scripts/card.js';
 import {openPopUp, closeButtonPopUp, closeOverlayPopUp, closePopUp} from './scripts/modal.js';
 import {enableValidation, clearValidation} from './scripts/validation.js';
 import {getMyProfile, getCards, editMyProfile, pushNewCard, changeAvatar} from './scripts/api.js';
+import {renderLoading} from './scripts/ux.js';
 
 const buttonsClosePopUp = document.querySelectorAll('.popup__close');
 const overlaysPopUp = document.querySelectorAll('.popup');
@@ -23,11 +24,14 @@ const profileDescription = document.querySelector('.profile__description');
 const formEditProfile = popupEdit.querySelector('.popup__form');
 const nameInput = formEditProfile.querySelector('.popup__input_type_name');
 const jobInput = formEditProfile.querySelector('.popup__input_type_description');
+const buttonSubmitFormEdit = formEditProfile.querySelector('.popup__button');
 const formEditAvatar = popupAvatar.querySelector('.popup__form');
 const avatarUrl = formEditAvatar.querySelector('.popup__input_type_avatar');
+const buttonSubmitFormAvatar = formEditAvatar.querySelector('.popup__button');
 const formCardPlace = popUpNewCard.querySelector('.popup__form');
 const cardName = formCardPlace.querySelector('.popup__input_type_card-name');
 const pictureUrl = formCardPlace.querySelector('.popup__input_type_url');
+const buttonSubmitFormCardPlace = formCardPlace.querySelector('.popup__button');
 const placeCardData = {
   card: '.places__item',
   image: '.card__image',
@@ -81,24 +85,23 @@ buttonNewCard.addEventListener('click', () => {
   openPopUp(popUpNewCard);
 });
 
-formEditProfile.addEventListener('submit', (evt) => { 
-  evt.preventDefault();
+formEditProfile.addEventListener('submit', () => { 
+  renderLoading(true, buttonSubmitFormEdit);
   editMyProfile({name: nameInput.value, about: jobInput.value}).then(profile => {
     submitEditProfileForm(profileTitle, profileDescription, profile.name, profile.about, popupEdit)
-  }).catch((err) => {console.log(err)}); 
+  }).catch((err) => {console.log('Ошибка редактирования профиля ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormEdit)}); 
 });
 
-formEditAvatar.addEventListener('submit', (evt) => { 
-  evt.preventDefault();
-  console.log(avatarUrl.value);
+formEditAvatar.addEventListener('submit', () => {
+  renderLoading(true, buttonSubmitFormAvatar);
   changeAvatar(avatarUrl.value).then((user) => {
     profileImage.style.backgroundImage = `url('${user.avatar}')`;
     closePopUp(popupAvatar)
-  });
+  }).catch((err) => {console.log('Ошибка в изменении атарки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormAvatar)});
 })
 
-formCardPlace.addEventListener('submit', (evt)=>{
-  evt.preventDefault();
+formCardPlace.addEventListener('submit', ()=>{
+  renderLoading(true, buttonSubmitFormCardPlace);
   const placeNewData = {
     link: pictureUrl.value,
     name: cardName.value
@@ -107,7 +110,7 @@ formCardPlace.addEventListener('submit', (evt)=>{
     createNewPlace(placesList, createCard(cardTemplate, card, placeCardData, pushRemoveLike, deleteCard, increaseSizeImage, card.owner._id), popUpNewCard);
     formCardPlace.reset();
     clearValidation(formCardPlace, validationData)
-  }).catch((err) => {console.log(err)}); 
+  }).catch((err) => {console.log('Ошибка в добавлении новой карточки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormCardPlace, 'Создать')});
 });
 
 function addCard(containerForCards, card) {
