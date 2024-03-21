@@ -33,7 +33,7 @@ const formCardPlace = popUpNewCard.querySelector('.popup__form');
 const cardName = formCardPlace.querySelector('.popup__input_type_card-name');
 const pictureUrl = formCardPlace.querySelector('.popup__input_type_url');
 const buttonSubmitFormCardPlace = formCardPlace.querySelector('.popup__button');
-const buttonForDelCard = popUpDelCard.querySelector('.popup__button');
+const formConfirmationDelCard = popUpDelCard.querySelector('.popup__form');
 const placeCardData = {
   card: '.places__item',
   image: '.card__image',
@@ -118,7 +118,7 @@ formCardPlace.addEventListener('submit', ()=>{
   }).catch((err) => {console.log('Ошибка в добавлении новой карточки ' + err)}).finally(() => {renderLoading(false, buttonSubmitFormCardPlace, 'Создать')});
 });
 
-buttonForDelCard.addEventListener('click', () => deleteCardWithConfirmation(placeCardData.idDelCard, placeCardData.cardForDel, popUpDelCard));
+formConfirmationDelCard.addEventListener('submit', () => submitConfirmationForm(placeCardData.idDelCard, placeCardData.cardForDel, popUpDelCard));
 
 function addCard(containerForCards, card) {
   containerForCards.append(card)
@@ -143,15 +143,9 @@ function createNewPlace(containerForPlace, placeNewElement, popUpElement) {
   closePopUp(popUpElement)
 }
 
-function deleteCardWithConfirmation(id, card, popUp) {
+function submitConfirmationForm(id, card, popUp) {
   shiftCard(id).then(() => {
     deleteCard(card);
     closePopUp(popUp);
   }).catch((err) => {console.log('Ошибка в удалении карточки ' + err)})
 }
-/* Извините за комментарий, не совсем понял связь Ваших комметариев по поводу функции удаления карточки.
-   У меня удаляет не иконка на карточке, она лишь вызывает Pop-Up с подтверждением удаления, в котором 
-   как раз имеется кнопка для удаления. И не понятно за чем ради одной кнопки создавать форму, по этому решил
-   полную функцию удаления назвать deleteCardWithConfirmation и не создавать форму. И простите за невнимательность,
-   при создании ветки просмотра сайта через гитхаб, в спешке скопировал команды из теории, и затер "dev": "webpack serve".   
-*/ 
